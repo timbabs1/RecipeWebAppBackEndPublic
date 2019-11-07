@@ -1,14 +1,27 @@
 //import koa
 const koa = require('koa');
+const passport = require('koa-passport');
+
+require('./auth');
 
 //create a koa instance and store it in app variable
 const app = new koa();
 
+const cors = require('@koa/cors');
+app.use(cors());
+
 //import all the routes
 const admin = require('./routes/admin');
+const users = require('./routes/users');
+const login = require('./routes/login');
+const recipe = require('./routes/recipe');
 
 //apply the routes as middleware
 app.use(admin.routes());
+app.use(users.routes());
+app.use(login.routes());
+app.use(recipe.routes());
+app.use(passport.initialize());
 
 //if there is no environment variable set for port number
 //ues a default value of 3000
