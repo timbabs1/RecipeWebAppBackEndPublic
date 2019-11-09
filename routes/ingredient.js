@@ -23,24 +23,15 @@ router.post('/', bodyParser(), async (cnx, next) =>{
             cnx.throw(401)
         }
         else {//prevent server crash if values is undefined
-            let data = user
-            let ingredient = {
-                title : cnx.request.body.values === undefined ? undefined: cnx.request.body.values.title,
-                quantity : cnx.request.body.values === undefined ? undefined: cnx.request.body.values.quantity,
-                description: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.description,
-                categoryId: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.categoryId,
-                authorId: data.username === undefined ? undefined: data.username,
-                mainImageURL: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.mainImageURL,
-                Ending: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.Ending
-            };
-            try{
-                await model.add(recipe)
-                console.log('recipe created successfully')
-                let data2 = await model.getByTitle(recipe.title)
+            try {
+                let ingredient = cnx.request.body
+                for (const i in ingredient){
+                    let data = await model.add(ingredient[i])
+                    cnx.response.status = 201;
+                    cnx.body = {message: "ingredient created successfully"};
+                    console.log('ingredient added successfully')
+                }
                 
-                cnx.response.status = 201;
-                cnx.body = {message: "recipe created successfully", recipeData: JSON.stringify(data2[0].ID)};
-                return data2;
             }
             catch(error){
                 cnx.response.status = error.status;
@@ -50,3 +41,5 @@ router.post('/', bodyParser(), async (cnx, next) =>{
         }
     }) (cnx);
 })
+
+module.exports = router;

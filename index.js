@@ -15,12 +15,14 @@ const admin = require('./routes/admin');
 const users = require('./routes/users');
 const login = require('./routes/login');
 const recipe = require('./routes/recipe');
+const ingredient = require('./routes/ingredient');
 
 //apply the routes as middleware
 app.use(admin.routes());
 app.use(users.routes());
 app.use(login.routes());
 app.use(recipe.routes());
+app.use(ingredient.routes());
 app.use(passport.initialize());
 
 //if there is no environment variable set for port number

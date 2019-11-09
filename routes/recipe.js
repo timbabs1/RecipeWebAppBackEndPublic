@@ -39,7 +39,7 @@ router.post('/', bodyParser(), async (cnx, next) =>{
                 let data2 = await model.getByTitle(recipe.title)
                 
                 cnx.response.status = 201;
-                cnx.body = {message: "recipe created successfully", recipeData: JSON.stringify(data2[0].ID)};
+                cnx.body = {message: "recipe created successfully", recipeId: JSON.stringify(data2[0].ID), categoryId: JSON.stringify(data2[0].categoryId)};
                 return data2;
             }
             catch(error){
