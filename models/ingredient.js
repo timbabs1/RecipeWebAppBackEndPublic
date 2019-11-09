@@ -25,6 +25,8 @@ exports.add = async (ingredient) => {
             throw {message:'recipeId is required', status:400};
         }
 
+        const ok = 'test'
+
         /* if(!ingredient.mainImageURL){
             throw {message:'mainImage is required', status:400};
         } */
