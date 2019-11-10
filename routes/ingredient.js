@@ -25,12 +25,17 @@ router.post('/', bodyParser(), async (cnx, next) =>{
         else {//prevent server crash if values is undefined
             try {
                 let ingredient = cnx.request.body
+                
                 for (const i in ingredient){
                     let data = await model.add(ingredient[i])
                     cnx.response.status = 201;
-                    cnx.body = {message: "ingredient created successfully"};
+                    cnx.body = {message: "ingredient created successfully", recipeId: ingredient[0].recipeId, categoryId: ingredient[0].categoryId};
+                
                     console.log('ingredient added successfully')
                 }
+                
+                /* cnx.response.status = 201;
+                cnx.body = {message: "ingredient created successfully", recipeId: JSON.stringify(data2[0].ID), categoryId: JSON.stringify(data2[0].categoryId)}; */
                 
             }
             catch(error){
