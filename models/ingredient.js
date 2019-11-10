@@ -25,6 +25,8 @@ exports.add = async (ingredient) => {
             throw {message:'recipeId is required', status:400};
         }
 
+        const ok = 'test'
+
         /* if(!ingredient.mainImageURL){
             throw {message:'mainImage is required', status:400};
         } */
@@ -50,6 +52,33 @@ exports.add = async (ingredient) => {
     } catch (error) {
        //in case we caught an error that has no status defined then this is an error from our database
         //therefore we should set the status code to server error
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+//get an article by its id
+exports.getByTitle = async (ingredientTitle) => {
+    try {
+        //first connect to the database
+
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM ingredient WHERE title = \'${ingredientTitle}\'`;
+        const connection = await mysql.createConnection(info.config);
+
+        //wait for the async code to finish
+        let data = await connection.query(sql);
+
+        //wait until connection to db is closed
+        await connection.end();
+
+        //return the result
+        return data;
+    } catch (error) {
+        //if an error occured please log it and throw an exception
         if(error.status === undefined){
             error.status = 500;
             throw error;
