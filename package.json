@@ -13,9 +13,14 @@
   "author": "Babatunde And Francis",
   "license": "ISC",
   "dependencies": {
+    "@koa/cors": "^2.2.3",
+    "bcrypt": "^3.0.6",
     "koa": "^2.10.0",
     "koa-bodyparser": "^4.2.1",
+    "koa-passport": "^4.1.3",
     "koa-router": "^7.4.0",
-    "nodemon": "^1.19.3"
+    "nodemon": "^1.19.3",
+    "passport-http": "^0.3.0",
+    "promise-mysql": "^4.1.1"
   }
 }
