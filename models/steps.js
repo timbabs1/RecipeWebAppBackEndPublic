@@ -78,9 +78,9 @@ exports.putById = async (stepId, description, order, mainImageURL) => {
             throw {message:'stepId is required', status:400};
         }
 
-        if(!title){
+      /*   if(!title){
             throw {message:'title is required', status:400};
-        }
+        } */
 
         if(!description){
             throw {message:'description is required', status:400};

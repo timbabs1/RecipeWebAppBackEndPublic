@@ -25,6 +25,7 @@ router.post('/', bodyParser(), async (cnx, next) =>{
         cnx.body = {message: "user was added successfully", userData: data};
         cnx.response.status = 201;
         console.log('user added successfully')
+        console.log(data)
     }
     catch(error){
         cnx.response.status = error.status;

@@ -213,10 +213,6 @@ exports.putById = async (recipeId, title, description, subtitle, categoryId, mai
             throw {message:'title is required', status:400};
         }
 
-        if(!description){
-            throw {message:'description is required', status:400};
-        }
-
         if(!subtitle){
             throw {message:'subtitle is required', status:400};
         }

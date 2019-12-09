@@ -18,6 +18,8 @@ const login = require('./routes/login');
 const recipe = require('./routes/recipe');
 const ingredient = require('./routes/ingredient');
 const steps = require('./routes/steps');
+const search = require('./routes/search');
+const recent = require('./routes/recentlyAdded.js');
 
 //apply the routes as middleware
 app.use(admin.routes());
@@ -27,6 +29,8 @@ app.use(recipe.routes());
 app.use(ingredient.routes());
 app.use(steps.routes());
 app.use(passport.initialize());
+app.use(search.routes());
+app.use(recent.routes());
 
 //if there is no environment variable set for port number
 //ues a default value of 3000
