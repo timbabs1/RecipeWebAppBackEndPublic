@@ -37,6 +37,7 @@ exports.add = async (ingredient) => {
             description : ingredient.description,
             categoryId : ingredient.categoryId,
             recipeId : ingredient.recipeId,
+            mainImageURL : ingredient.mainImageURL,
             DateCreated : new Date()
         }
         
@@ -78,6 +79,94 @@ exports.getByTitle = async (ingredientTitle) => {
         //return the result
         return data;
     } catch (error) {
+        //if an error occured please log it and throw an exception
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+exports.getById = async (recipeId) => {
+    try {
+        const connection = await mysql.createConnection(info.config)
+
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM ingredient WHERE recipeId = \'${recipeId}\'`
+
+        let data = await connection.query(sql);
+
+        await connection.end();
+
+        return data;
+    }
+    catch (error) {
+        //if an error occured please log it and throw an exception
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+exports.putById = async (ingredientId, title, description, quantity, mainImageURL) => {
+    try {
+        const connection = await mysql.createConnection(info.config)
+
+        if(!ingredientId){
+            throw {message:'ingredientId is required', status:400};
+        }
+
+        if(!title){
+            throw {message:'title is required', status:400};
+        }
+
+        if(!description){
+            throw {message:'description is required', status:400};
+        }
+
+        if(!quantity){
+            throw {message:'quantity is required', status:400};
+        }
+        if(!mainImageURL){
+            throw {message:'mainImageURL is required', status:400};
+        }
+
+        //this is the sql statement to execute
+        let sql = `UPDATE ingredient SET title = \'${title}\', description = \'${description}\', quantity = \'${quantity}\', mainImageURL = \'${mainImageURL}\' WHERE ID = \'${ingredientId}\'`
+
+        let data = await connection.query(sql);
+
+        await connection.end();
+
+        return data;
+    }
+    catch (error) {
+        //if an error occured please log it and throw an exception
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+exports.deleteById = async (ingredientId) => {
+    try {
+        const connection = await mysql.createConnection(info.config)
+
+        //this is the sql statement to execute
+        let sql = `DELETE FROM ingredient WHERE ID = \'${ingredientId}\'`
+
+        let data = await connection.query(sql);
+
+        await connection.end();
+
+        return data;
+    }
+    catch (error) {
         //if an error occured please log it and throw an exception
         if(error.status === undefined){
             error.status = 500;

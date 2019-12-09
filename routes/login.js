@@ -27,6 +27,7 @@ router.post('/', async (cnx) => {
             }
             else {
                 cnx.body = data
+                console.log(data.ID)
                 let loginData =  {
                     username: data.username,
                     loginDateTime: new Date()

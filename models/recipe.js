@@ -28,6 +28,10 @@ exports.add = async (recipe) => {
         }
 
 
+        if(!recipe.mainImageURL){
+            throw {message:'Image is required', status:400};
+        }
+
         if(!recipe.Subtitle){
             throw {message:'Subtitle is required', status:400};
         }
@@ -75,6 +79,7 @@ exports.add = async (recipe) => {
             title: recipe.title,
             Subtitle: recipe.Subtitle,
             description: recipe.recipeDescription,
+            mainImageURL: recipe.mainImageURL,
             categoryId: data2,
             authorId: data1,
             DateCreated: new Date(),
@@ -100,7 +105,7 @@ exports.add = async (recipe) => {
     }
 }
 
-//get an article by its id
+//get a recipe by its title
 exports.getByTitle = async (recipeTitle) => {
     try {
         //first connect to the database
@@ -118,6 +123,164 @@ exports.getByTitle = async (recipeTitle) => {
         //return the result
         return data;
     } catch (error) {
+        //if an error occured please log it and throw an exception
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+exports.getById = async (recipeId) => {
+    try {
+        const connection = await mysql.createConnection(info.config)
+
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM recipe WHERE ID = \'${recipeId}\'`
+
+        let data = await connection.query(sql);
+
+        await connection.end();
+
+        return data;
+    }
+    catch (error) {
+        //if an error occured please log it and throw an exception
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+exports.getByCategory = async (category) => {
+    try {
+        const connection = await mysql.createConnection(info.config)
+
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM recipe WHERE categoryId = \'${category}\'`
+
+        let data = await connection.query(sql);
+
+        await connection.end();
+
+        return data;
+    }
+    catch (error) {
+        //if an error occured please log it and throw an exception
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+exports.getAll = async (authorId, page, limit) => {
+    try {
+        const connection = await mysql.createConnection(info.config)
+
+        //this is the sql statement to execute
+        let sql = `SELECT * FROM recipe WHERE authorId = \'${authorId}\' LIMIT ${page},${limit}`
+
+        let data = await connection.query(sql);
+
+        await connection.end();
+
+        return data;
+    }
+    catch (error) {
+        //if an error occured please log it and throw an exception
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+exports.putById = async (recipeId, title, description, subtitle, categoryId, mainImageURL) => {
+    try {
+        const connection = await mysql.createConnection(info.config)
+
+        if(!recipeId){
+            throw {message:'recipeId is required', status:400};
+        }
+
+        if(!title){
+            throw {message:'title is required', status:400};
+        }
+
+        if(!description){
+            throw {message:'description is required', status:400};
+        }
+
+        if(!subtitle){
+            throw {message:'subtitle is required', status:400};
+        }
+
+        if(!mainImageURL){
+            throw {message:'order is required', status:400};
+        }
+
+        if(!categoryId){
+            throw {message:'categoryId is required', status:400};
+        }
+
+
+        //check to make sure user exist in the database for author Id
+        let sql2 = `select ID from category where name = \'${categoryId}\'`
+
+        let data2 = await connection.query(sql2).then(res => { return JSON.stringify(res[0].ID)});
+
+        //console.log(dat
+
+        //let stringify_data2 = JSON.stringify(data2[0].ID)
+
+        //if the query doesnt return a record then the user doesnt exist
+        if(!data2.length){
+            //first close connection as we are leaving this function
+            await connection.end();
+            //then throw an error to leave the function
+            throw {message: 'category doesnt exist, select a valid category!', status:400};
+        }
+
+
+        //this is the sql statement to execute
+        let sql = `UPDATE recipe SET title = \'${title}\', subtitle = \'${subtitle}\', categoryId = \'${data2}\', mainImageURL = \'${mainImageURL}\' WHERE ID = \'${recipeId}\'`
+
+        let data = await connection.query(sql);
+
+        await connection.end();
+
+        return data;
+    }
+    catch (error) {
+        //if an error occured please log it and throw an exception
+        if(error.status === undefined){
+            error.status = 500;
+            throw error;
+        }
+        throw error
+    }
+}
+
+exports.deleteById = async (recipeId) => {
+    try {
+        const connection = await mysql.createConnection(info.config)
+
+        //this is the sql statement to execute
+        let sql = `DELETE FROM recipe WHERE ID = \'${recipeId}\'`
+
+        let data = await connection.query(sql);
+
+        await connection.end();
+
+        return data;
+    }
+    catch (error) {
         //if an error occured please log it and throw an exception
         if(error.status === undefined){
             error.status = 500;

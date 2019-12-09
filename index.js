@@ -1,5 +1,6 @@
 //import koa
 const koa = require('koa');
+const multer = require('@koa/multer')
 const passport = require('koa-passport');
 
 require('./auth');

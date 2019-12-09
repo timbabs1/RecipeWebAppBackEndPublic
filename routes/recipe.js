@@ -4,6 +4,7 @@ let Router = require('koa-router');
 let router = Router({
     prefix: '/api/v1.0/recipe'
 }); //Prefixed all routes with /api/v1.0/articles
+
 let model = require('../models/recipe');
 const passport = require('koa-passport');
 
@@ -30,10 +31,11 @@ router.post('/', bodyParser(), async (cnx, next) =>{
                 description: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.description,
                 categoryId: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.categoryId,
                 authorId: data.username === undefined ? undefined: data.username,
-                mainImageURL: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.mainImageURL,
+                mainImageURL: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.profilePhoto,
                 Ending: cnx.request.body.values === undefined ? undefined: cnx.request.body.values.Ending
             };
             try{
+                console.log(recipe)
                 await model.add(recipe)
                 console.log('recipe created successfully')
                 let data2 = await model.getByTitle(recipe.title)
@@ -60,14 +62,16 @@ router.get('/', async (cnx) => {
             cnx.body = { success: false }
             cnx.throw(401)
         } else {
-            let recipeName = cnx.request.body === undefined ? undefined: cnx.request.body.recipeName
 
             try {
-                let data = await model.getByTitle(recipeTitle)
-                //let id = cnx.params.id
-                //let data = await model.getByid(id);
-
-
+                let limit = (cnx.request.query.limit === undefined ? 32:cnx.request.query.limit);
+                console.log(limit)
+                let page = (cnx.request.query.page === undefined ? 1:cnx.request.query.page);
+                //validate the query parameters
+                limit = limit > 200 ? 200: limit; 
+                limit = limit < 1 ? 32: limit; 
+                page = page < 1 ? 1 : page; 
+                let data = await model.getAll(user.ID, page, limit)
                 if(data.length === 0){
                     cnx.response.status = 404;
                     cnx.body = {message:"recipe not found"}
@@ -83,6 +87,162 @@ router.get('/', async (cnx) => {
     }) (cnx)
   })
 
+  router.get('/category', async (cnx) => {
+    return passport.authenticate('basic', async (err, user, info, status) => {
+        if(err){
+            cnx.body = err
+        }
+        else if (user === false) {
+            cnx.body = { success: false }
+            cnx.throw(401)
+        } else {
+
+            try {
+                let category = cnx.request.query.category
+                let limit = (cnx.request.query.limit === undefined ? 32:cnx.request.query.limit);
+                console.log(limit)
+                let page = (cnx.request.query.page === undefined ? 1:cnx.request.query.page);
+                //validate the query parameters
+                limit = limit > 200 ? 200: limit; 
+                limit = limit < 1 ? 32: limit; 
+                page = page < 1 ? 1 : page; 
+                let data = await model.getByCategory(category)
+                if(data.length === 0){
+                    cnx.response.status = 404;
+                    cnx.body = {message:"recipe not found"}
+                }
+                else
+                    cnx.body = data
+                }
+            catch(error){
+                cnx.response.status = error.status;
+                cnx.body = {message:error.message, status:error.status}
+            }
+        } 
+    }) (cnx)
+  })
+
+<<<<<<< HEAD
+=======
+  router.get('/:id([0-9]{1,})', async (cnx) => {
+    return passport.authenticate('basic', async (err, user, info, status) => {
+        if(err){
+            cnx.body = err
+        }
+        else if (user === false) {
+            cnx.body = { success: false }
+            cnx.throw(401)
+        } else {
+
+            try {
+                let limit = (cnx.params.limit === undefined ? 32:cnx.params.limit);
+                limit = limit > 200 ? 200: limit; 
+                /* console.log(limit) */
+                let recipeId = cnx.params.id
+                console.log(recipeId)
+                let data = await model.getById(recipeId);
+
+
+                if(data.length === 0){
+                    cnx.response.status = 404;
+                    cnx.body = {message:"recipe not found"}
+                }
+                else
+                    cnx.body = data
+                }
+            catch(error){
+                console.log(error.status)
+                if(error.status === undefined){
+                    error.status = 500;
+                    throw error;
+                }
+                cnx.response.status = error.status
+                cnx.body = {message:error.message, status:error.status}
+            }
+        } 
+    }) (cnx)
+  })
+
+  router.put('/:id([0-9]{1,})', bodyParser(), async (cnx, next) => {
+    return passport.authenticate('basic', async (err, user, info, status) => {
+        if(err){
+            cnx.body = err
+        }
+        else if (user === false) {
+            cnx.body = { success: false }
+            cnx.throw(401)
+        } else {
+
+            try {
+                let recipeId = cnx.params.id
+                console.log(recipeId)
+                let title = cnx.request.body.values.title
+                let description = cnx.request.body.values.description
+                let subtitle = cnx.request.body.values.subtitle
+                let categoryId = cnx.request.body.values.categoryId
+                let mainImageURL = cnx.request.body.values.recipePhoto
+                console.log(mainImageURL)
+                let data = await model.putById(recipeId, title, description, subtitle, categoryId, mainImageURL); 
+
+
+                if(data.length === 0){
+                    cnx.response.status = 404;
+                    cnx.body = {message:"recipe not found"}
+                }
+                else
+                    cnx.body = data
+                }
+            catch(error){
+                console.log(error.status)
+                console.log(error.message)
+                if(error.status === undefined){
+                    error.status = 500;
+                    throw error;
+                }
+                cnx.response.status = error.status
+                cnx.body = {message:error.message, status:error.status}
+            }
+        } 
+    }) (cnx)
+  })
+
+  router.delete('/:id([0-9]{1,})', bodyParser(), async (cnx, next) => {
+    return passport.authenticate('basic', async (err, user, info, status) => {
+        if(err){
+            cnx.body = err
+        }
+        else if (user === false) {
+            cnx.body = { success: false }
+            cnx.throw(401)
+        } else {
+
+            try {
+                let recipeId = cnx.params.id
+                console.log(recipeId)
+                let data = await model.deleteById(recipeId);
+                console.log('ingredient deleted successfully')
+                if(data.length === 0){
+                    cnx.response.status = 404;
+                    cnx.body = {message:"recipe not found"}
+                }
+                else
+                    cnx.body = data
+                }
+            catch(error){
+                console.log(error.status)
+                console.log(error.message)
+                if(error.status === undefined){
+                    error.status = 500;
+                    throw error;
+                }
+                cnx.response.status = error.status
+                cnx.body = {message:error.message, status:error.status}
+            }
+        } 
+    }) (cnx)
+  })
+
+>>>>>>> recipe_get_api
 module.exports = router;
 
 
