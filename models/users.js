@@ -99,7 +99,7 @@ exports.findOne = async (authData, callback) =>{
             if(pass){
                 //if yes callback with the user data
                 callback(null, data[0]);
-                console.log('success') }
+                console.log('success')}
             else{
                 //otherwise callback with false
                 callback(null, false);
