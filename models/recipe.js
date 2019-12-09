@@ -205,6 +205,31 @@ exports.putById = async (recipeId, title, description, subtitle, categoryId, mai
     try {
         const connection = await mysql.createConnection(info.config)
 
+        if(!recipeId){
+            throw {message:'recipeId is required', status:400};
+        }
+
+        if(!title){
+            throw {message:'title is required', status:400};
+        }
+
+        if(!description){
+            throw {message:'description is required', status:400};
+        }
+
+        if(!subtitle){
+            throw {message:'subtitle is required', status:400};
+        }
+
+        if(!mainImageURL){
+            throw {message:'order is required', status:400};
+        }
+
+        if(!categoryId){
+            throw {message:'categoryId is required', status:400};
+        }
+
+
         //check to make sure user exist in the database for author Id
         let sql2 = `select ID from category where name = \'${categoryId}\'`
 

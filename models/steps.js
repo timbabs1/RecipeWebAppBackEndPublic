@@ -74,6 +74,26 @@ exports.putById = async (stepId, description, order, mainImageURL) => {
     try {
         const connection = await mysql.createConnection(info.config)
 
+        if(!stepId){
+            throw {message:'stepId is required', status:400};
+        }
+
+        if(!title){
+            throw {message:'title is required', status:400};
+        }
+
+        if(!description){
+            throw {message:'description is required', status:400};
+        }
+
+        if(!order){
+            throw {message:'order is required', status:400};
+        }
+
+        if(!mainImageURL){
+            throw {message:'order is required', status:400};
+        }
+
         //this is the sql statement to execute
         let sql = `UPDATE steps SET description = \'${description}\', sort = \'${order}\', mainImageURL = \'${mainImageURL}\' WHERE ID = \'${stepId}\'`
 

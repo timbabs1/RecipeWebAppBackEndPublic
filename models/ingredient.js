@@ -130,6 +130,9 @@ exports.putById = async (ingredientId, title, description, quantity, mainImageUR
         if(!quantity){
             throw {message:'quantity is required', status:400};
         }
+        if(!mainImageURL){
+            throw {message:'mainImageURL is required', status:400};
+        }
 
         //this is the sql statement to execute
         let sql = `UPDATE ingredient SET title = \'${title}\', description = \'${description}\', quantity = \'${quantity}\', mainImageURL = \'${mainImageURL}\' WHERE ID = \'${ingredientId}\'`
