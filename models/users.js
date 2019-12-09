@@ -65,9 +65,12 @@ exports.add = async (user) => {
 
         
         data = await connection.query(sql, userData);
-    
+
+        let sql1 = `Select * FROM users WHERE username = \'${userData.username}\' `
+
+        let data2 = await connection.query(sql1)    
         await connection.end();
-        return userData;
+        return data2;
     } catch (error) {
         //in case we caught an error that has no status defined then this is an error from our database
         //therefore we should set the status code to server error

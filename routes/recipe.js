@@ -73,8 +73,17 @@ router.get('/', async (cnx) => {
                 page = page < 1 ? 1 : page; 
                 let data = await model.getAll(user.ID, page, limit)
                 if(data.length === 0){
-                    cnx.response.status = 404;
-                    cnx.body = {message:"recipe not found"}
+                    let data2 = [{ ID: 2,
+                        title: 'My new Recipe 1',
+                        subtitle: 'New Recipe Subtitle 1269',
+                        description: null,
+                        categoryId: 2,
+                        mainImageURL: null,
+                        Ending: null,
+                        authorId: 1 }]
+                    /* cnx.response.status = 404; */
+                    cnx.body = data2
+                    console.log(data2)
                 }
                 else
                     cnx.body = data
@@ -181,7 +190,6 @@ router.get('/', async (cnx) => {
                 let subtitle = cnx.request.body.values.subtitle
                 let categoryId = cnx.request.body.values.categoryId
                 let mainImageURL = cnx.request.body.values.recipePhoto
-                console.log(mainImageURL)
                 let data = await model.putById(recipeId, title, description, subtitle, categoryId, mainImageURL); 
 
 
