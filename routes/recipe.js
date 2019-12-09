@@ -87,7 +87,6 @@ router.get('/', async (cnx) => {
                 }
                 else
                     cnx.body = data
-                    console.log(data[0])
                 }
             catch(error){
                 cnx.response.status = error.status;
@@ -198,7 +197,6 @@ router.get('/', async (cnx) => {
                 }
                 else
                     cnx.body = data
-                    console.log(data)
                 }
             catch(error){
                 console.log(error.status)
