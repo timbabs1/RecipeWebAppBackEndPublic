@@ -122,8 +122,6 @@ router.get('/', async (cnx) => {
     }) (cnx)
   })
 
-<<<<<<< HEAD
-=======
   router.get('/:id([0-9]{1,})', async (cnx) => {
     return passport.authenticate('basic', async (err, user, info, status) => {
         if(err){
@@ -242,7 +240,6 @@ router.get('/', async (cnx) => {
     }) (cnx)
   })
 
->>>>>>> recipe_get_api
 module.exports = router;
 
 
