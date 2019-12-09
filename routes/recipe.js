@@ -82,6 +82,8 @@ router.get('/', async (cnx) => {
         } 
     }) (cnx)
   })
+
 module.exports = router;
+
 
     
